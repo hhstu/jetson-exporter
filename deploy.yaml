@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: jetson-exporter
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: jetson-exporter
+  template:
+    metadata:
+      labels:
+        app: jetson-exporter
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: beta.kubernetes.io/os
+                    operator: In
+                    values:
+                      - linux
+                  - key: beta.kubernetes.io/arch
+                    operator: In
+                    values:
+                      - arm64
+      containers:
+        - image: basefly/jetson-exporter:v0.1
+          name: jetson-exporter
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - mountPath: /run/jtop.sock
+              name: jtop-sock
+      dnsPolicy: ClusterFirst
+      hostNetwork: true
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+      tolerations:
+        - operator: Exists
+      volumes:
+        - hostPath:
+            path: /run/jtop.sock
+            type: Socket
+          name: jtop-sock
