@@ -94,14 +94,22 @@ class CustomCollector(object):
             # CPU usage 
             #
             g = GaugeMetricFamily('jetson_usage_cpu', 'CPU % schedutil', labels=['cpu'])
-            g.add_metric(['cpu_1'], self._jetson.cpu['CPU1']['val'])
-            g.add_metric(['cpu_2'], self._jetson.cpu['CPU2']['val'])
-            g.add_metric(['cpu_3'], self._jetson.cpu['CPU3']['val'])
-            g.add_metric(['cpu_4'], self._jetson.cpu['CPU4']['val'])
-            g.add_metric(['cpu_5'], self._jetson.cpu['CPU5']['val'])
-            g.add_metric(['cpu_6'], self._jetson.cpu['CPU6']['val'])
-            g.add_metric(['cpu_7'], self._jetson.cpu['CPU7']['val'])
-            g.add_metric(['cpu_8'], self._jetson.cpu['CPU8']['val'])
+            if 'CPU1' in self._jetson.cpu:
+                g.add_metric(['cpu_1'], self._jetson.cpu['CPU1']['val'])
+            if 'CPU2' in self._jetson.cpu:
+                g.add_metric(['cpu_2'], self._jetson.cpu['CPU2']['val'])
+            if 'CPU3' in self._jetson.cpu:
+                g.add_metric(['cpu_3'], self._jetson.cpu['CPU3']['val'])
+            if 'CPU4' in self._jetson.cpu:
+                g.add_metric(['cpu_4'], self._jetson.cpu['CPU4']['val'])
+            if 'CPU5' in self._jetson.cpu:
+                g.add_metric(['cpu_5'], self._jetson.cpu['CPU5']['val'])
+            if 'CPU6' in self._jetson.cpu:
+                g.add_metric(['cpu_6'], self._jetson.cpu['CPU6']['val'])
+            if 'CPU7' in self._jetson.cpu:
+                g.add_metric(['cpu_7'], self._jetson.cpu['CPU7']['val'])
+            if 'CPU8' in self._jetson.cpu:
+                g.add_metric(['cpu_8'], self._jetson.cpu['CPU8']['val'])
             yield g
 
             # 
@@ -118,7 +126,7 @@ class CustomCollector(object):
             # RAM usage
             #
             g = GaugeMetricFamily('jetson_usage_ram', 'Memory usage', labels=['ram'])
-            g.add_metric(['used'], self._jetson.ram['use'])
+           # g.add_metric(['used'], self._jetson.ram['use'])
             g.add_metric(['shared'], self._jetson.ram['shared'])
             # g.add_metric(['total'], self._jetson.ram['tot'])
             # g.add_metric(['unit'], self._jetson.ram['unit'])
@@ -149,8 +157,8 @@ class CustomCollector(object):
             # Swapfile usage
             #
             g = GaugeMetricFamily('jetson_usage_swap', 'Swapfile usage', labels=['swap'])
-            g.add_metric(['used'], self._jetson.swap['use'])
-            g.add_metric(['total'], self._jetson.swap['tot'])
+            #g.add_metric(['used'], self._jetson.swap['use'])
+            #g.add_metric(['total'], self._jetson.swap['tot'])
             # g.add_metric(['unit'], self._jetson.swap['unit'])
             # g.add_metric(['cached_size'], self._jetson.swap['cached']['size'])
             # g.add_metric(['cached_unit'], self._jetson.swap['cached']['unit'])
@@ -184,7 +192,7 @@ class CustomCollector(object):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--port', type=int, default=8000, help='Metrics collector port number')
+    parser.add_argument('--port', type=int, default=9201, help='Metrics collector port number')
 
     args = parser.parse_args()
 
